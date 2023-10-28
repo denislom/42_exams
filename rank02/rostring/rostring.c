@@ -1,5 +1,4 @@
-/*
-Assignment name  : rostring
+/* Assignment name  : rostring
 Expected files   : rostring.c
 Allowed functions: write, malloc, free
 --------------------------------------------------------------------------------
@@ -32,51 +31,64 @@ first
 $>
 $>./rostring | cat -e
 $
-$>
-*/
+$> */
 
 #include <unistd.h>
 
-int	main(int argc , char **argv)
+int	main(int argc, char *argv[])
 {
-	int i = 0;
-	int j;
+	int	i;
+	int	start;
+	int	end;
+	int	flag;
+	int	flag2;
 
+	i = 0;
+	start = 0;
+	flag = 0;
+	flag2 = 0;
 	if (argc >= 2)
 	{
-		
-			while (argv[1][i] && (argv[1][i] == ' ' || argv[1][i] == '\t')) // search for is_space and move the position.
+		// position of the beginning of the first word
+		while (argv[1][i] && (argv[1][i] == ' ' || argv[1][i] == '\t'))
+			i++;
+		start = i;
+		// position of the end of the first word
+		while (argv[1][i] && argv[1][i] >= '!' && argv[1][i] <= '~')
+			i++;
+		end = i;
+		while (argv[1][i] && (argv[1][i] == ' ' || argv[1][i] == '\t'))
+			i++;
+		// printing output from the begining of the second word
+		while (argv[1][i])
+		{
+			while (argv[1][i] && argv[1][i] >= '!' && argv[1][i] <= '~')
 			{
+				write(1, &argv[1][i], 1);
+				flag2 = 1;
 				i++;
 			}
-			j = i; // this is the postion of starting of the word.
-			while (argv[1][i])
+			// skip the spaces
+			while (argv[1][i] == ' ' || argv[1][i] == '\t')
 			{
-				while (argv[1][i] && (argv[1][i] != ' ' && argv[1][i] != '\t')) // find the next word.
-				{
-					i++;
-				}
-				while (argv[1][i] && (argv[1][i] == ' ' || argv[1][i] == '\t')) // find the next word.
-				{
-					i++;
-				}
-				while (argv[1][i] && (argv[1][i] != ' ' && argv[1][i] != '\t') && (argv[1][i -1] == ' ' || argv[1][i - 1] == '\t')) // print the word till it reaches last.
-				{
-					while (argv[1][i] && (argv[1][i] != ' ' && argv[1][i] != '\t'))
-					{
-						write (1, &argv[1][i], 1);
-						i++;
-					}
-					write (1, " ", 1);
-					i++;
-				}
+				flag = 1;
+				i++;
 			}
-			while (argv[1][j] && (argv[1][j] != ' ' && argv[1][j] != '\t')) // print the first word now.
+			if (flag == 1)
 			{
-				write (1, &argv[1][j], 1);
-				j++;
+				write(1, " ", 1);
+				flag = 0;
 			}
+		}
+		// printing the first word
+		if (flag2 == 1 && argv[1][i - 1] != ' ')
+			write(1, " ", 1);
+		while (argv[1][start] && start < end)
+		{
+			write(1, &argv[1][start], 1);
+			start++;
+		}
 	}
-	write (1, "\n", 1);
+	write(1, "\n", 1);
 	return (0);
 }
